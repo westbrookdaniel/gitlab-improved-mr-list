@@ -7,17 +7,14 @@ if (
     // Check if it already exists
     document.getElementById(id) && document.getElementById(id).remove()
 
-    const div = document.createElement('div')
-    div.classList.add('issuable-comments', 'd-none', 'd-sm-flex')
-    div.id = id
+    const li = document.createElement('div')
+    li.classList.add('issuable-comments', 'd-none', 'd-sm-flex')
+    li.id = id
+    li.style.textAlign = 'center'
 
     const span = document.createElement('span')
-    span.classList.add('badge', 'color-label')
-    span.style.backgroundColor = color
-    span.style.color = '#333238'
-    span.style.minWidth = '40px'
-    span.style.padding = '1px 2px'
-    span.style.marginBottom = '1px'
+    span.style.color = color
+    span.style.minWidth = '20px'
 
     if (resolved === undefined || resolvable === undefined) {
       span.innerText = '...'
@@ -25,8 +22,8 @@ if (
       span.innerText = `${resolved}/${resolvable}`
     }
 
-    div.prepend(span)
-    return div
+    li.prepend(span)
+    return li
   }
 
   // For each merge request (using index as id)
@@ -53,15 +50,15 @@ if (
         // Add a badge to the merge request
         if (resolvable > resolved) {
           // Not resolved
-          const red = 'var(--red-100, #fdd4cd)'
+          const red = '#dd2b0e'
           metaList.append(createThreadsBadge(id, red, resolved, resolvable))
         } else if (resolved === resolvable && resolvable > 0) {
           // All Resolved
-          const green = 'var(--green-100, #c3e6cd)'
+          const green = '#108548'
           metaList.append(createThreadsBadge(id, green, resolved, resolvable))
         } else {
           // No threads
-          const gray = '#e3e3e3'
+          const gray = '#737278'
           metaList.append(createThreadsBadge(id, gray, resolved, resolvable))
         }
       })
