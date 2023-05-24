@@ -1,7 +1,7 @@
 {
   "name": "Gitlab Improved List",
   "version": "0.1.0",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "description": "Chrome extension for imrpoving the Gitlab MR List",
   "homepage_url": "https://github.com/westbrookdaniel/gitlab-improved-list",
   "content_scripts": [
@@ -10,5 +10,5 @@
       "js": ["index.js"]
     }
   ],
-  "permissions": ["https://gitlab.com/*"]
+  "host_permissions": ["https://gitlab.com/*"]
 }
