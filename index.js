@@ -3,24 +3,40 @@ if (
   /^https:\/\/gitlab\.*.*\/merge_requests\/?(\?.*)?$/.test(window.location.href)
 ) {
   // Util for adding a badge to the merge request
-  function createThreadsBadge(element, color, resolved, resolvable) {
-    const li = document.createElement('li')
-    li.classList.add('issuable-comments', 'd-none', 'd-sm-flex')
+  function createThreadsBadge(id, color, resolved, resolvable) {
+    // Check if it already exists
+    document.getElementById(id) && document.getElementById(id).remove()
+
+    const div = document.createElement('div')
+    div.classList.add('issuable-comments', 'd-none', 'd-sm-flex')
+    div.id = id
 
     const span = document.createElement('span')
     span.classList.add('badge', 'color-label')
     span.style.backgroundColor = color
-    span.style.color = '#333333'
-    span.innerText = `${resolved}/${resolvable} threads resolved`
+    span.style.color = '#333238'
+    span.style.minWidth = '40px'
+    span.style.padding = '1px 2px'
+    span.style.marginBottom = '1px'
 
-    li.prepend(span)
-    element.prepend(li)
+    if (resolved === undefined || resolvable === undefined) {
+      span.innerText = '...'
+    } else {
+      span.innerText = `${resolved}/${resolvable}`
+    }
+
+    div.prepend(span)
+    return div
   }
 
-  // For each merge request
-  document.querySelectorAll('.merge-request').forEach((element) => {
+  // For each merge request (using index as id)
+  document.querySelectorAll('.merge-request').forEach((element, id) => {
     const anchor = element.querySelector('.merge-request-title-text a')
     const metaList = element.querySelector('.issuable-meta ul')
+
+    // Create loading placeholder
+    const gray = '#e3e3e3'
+    metaList.append(createThreadsBadge(id, gray))
 
     // Fetch it's discussions
     fetch(`${anchor.href}/discussions.json`)
@@ -36,9 +52,17 @@ if (
 
         // Add a badge to the merge request
         if (resolvable > resolved) {
-          createThreadsBadge(metaList, '#ffd3d3', resolved, resolvable)
+          // Not resolved
+          const red = 'var(--red-100, #fdd4cd)'
+          metaList.append(createThreadsBadge(id, red, resolved, resolvable))
         } else if (resolved === resolvable && resolvable > 0) {
-          createThreadsBadge(metaList, '#8fc7a6', resolved, resolvable)
+          // All Resolved
+          const green = 'var(--green-100, #c3e6cd)'
+          metaList.append(createThreadsBadge(id, green, resolved, resolvable))
+        } else {
+          // No threads
+          const gray = '#e3e3e3'
+          metaList.append(createThreadsBadge(id, gray, resolved, resolvable))
         }
       })
   })
