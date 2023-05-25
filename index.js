@@ -1,3 +1,51 @@
+// Run on any gitlab page
+if (/^https:\/\/gitlab\.*.*\/?$/.test(window.location.href)) {
+  // Find any mention of :https://example.com/image.png: and replace it with the image inline (like a custom emoji)
+  document
+    .querySelectorAll('h1, h2, h3, h4, h5, h6, p, a, span')
+    .forEach((element) => {
+      if (
+        element.innerHTML.includes(
+          ':<a rel="nofollow noreferrer noopener" href='
+        )
+      ) {
+        // Replace link child with image
+        Array.from(element.children).find((child) => {
+          if (child.tagName === 'A') {
+            const url = child.href
+            const img = document.createElement('img')
+            img.src = url
+            // Try and make it look like a custom emoji
+            img.style.maxWidth = '100%'
+            img.style.maxHeight = '100%'
+            img.style.height = '2em'
+            img.style.objectFit = 'contain'
+            img.style.margin = '0 auto'
+            img.style.display = 'inline-block'
+            // Used for identifying the element later
+            img.classList.add('_custom_emoji')
+            child.replaceWith(img)
+          }
+        })
+
+        // Remove the ":" on both sides
+        element.childNodes.forEach((child, i, arr) => {
+          // If just before or after our image
+          const nextItem = arr[i + 1]
+          if (nextItem?.classList?.contains?.('_custom_emoji')) {
+            // only replace last :
+            child.textContent = child.textContent.replace(/:$/, '')
+          }
+          const prevItem = arr[i - 1]
+          if (prevItem?.classList?.contains?.('_custom_emoji')) {
+            // only replace first :
+            child.textContent = child.textContent.replace(/^:/, '')
+          }
+        })
+      }
+    })
+}
+
 // Only run if on a gitlab merge request page
 if (
   /^https:\/\/gitlab\.*.*\/merge_requests\/?(\?.*)?$/.test(window.location.href)
