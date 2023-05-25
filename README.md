@@ -2,14 +2,12 @@
 
 A Chrome extension for imrpoving the Gitlab MR List
 
-## Installation
-
-### Chrome Web Store
+## Installation (Chrome Web Store)
 
 Pending upload, for now use the local installation method.
 Local installation will also alway be more up to date.
 
-### Local Installation
+## Installation (Local)
 
 1. Clone the repository locally
    -  If you're on windows and cloning into WSL, you can access WSL from
