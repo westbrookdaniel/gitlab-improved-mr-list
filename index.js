@@ -4,11 +4,7 @@ if (/^https:\/\/gitlab\.*.*\/?$/.test(window.location.href)) {
   document
     .querySelectorAll('h1, h2, h3, h4, h5, h6, p, a, span')
     .forEach((element) => {
-      if (
-        element.innerHTML.includes(
-          ':<a rel="nofollow noreferrer noopener" href='
-        )
-      ) {
+      if (element.innerHTML.includes(':<a ')) {
         // Replace link child with image
         Array.from(element.children).find((child) => {
           if (child.tagName === 'A') {
